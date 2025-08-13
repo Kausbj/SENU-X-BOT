@@ -33,20 +33,22 @@ cmd({
 }, async (conn, mek, m, { from }) => {
     try {
         // Main Menu Caption
-        let menuCaption = `╭━━━〔 *🧚‍♂️𝐒ᴇɴᴜ x 𝐁ᴏᴛ🧚‍♂️* 〕━━━┈⊷
-│ ✓ Owner : *${config.OWNER_NAME}*
-│ ✓ Mode : *[${config.MODE}]*
-│ ✓ Prefix : *[${config.PREFIX}]*
-│ ✓ Version : *5.0.0 Beta*
-│ ✓ Commands : *${commands.length}*
-╰━━━━━━━━━━━━━━━┈⊷
+        let menuCaption = `*⎠👨‍💻 ᴋᴀᴠɪ ᴍᴅ ʙʏ ᴋᴀᴠɪᴅᴜ ʀᴀꜱᴀɴɢᴀ 👨‍💻⎝* 
+        
+╭━━━〔 *🫧 𝘒𝘈𝘝𝘐 -𝘔𝘋 🫧* 〕━━━╌●◈◆
+> ☬ Owner : *${config.OWNER_NAME}*
+> ☬ Mode : *[${config.MODE}]*
+> ☬ Prefix : *[${config.PREFIX}]*
+> ☬ Version : *0.0.1 Beta*
+> ☬ Commands : *${commands.length}*
+╰━━━━━━━━━━━━━━━╌●◈◆
 ╭━━〔 *🧚‍♂️ Menu List 🧚‍♂️* 〕━━┈⊷`;
 
         menuCategories.forEach((cat, index) => {
-            menuCaption += `\n│❯❯ ${index + 1} *${cat.title}*`;
+            menuCaption += `\n│ *➤ ${index + 1} *${cat.title}*`;
         });
 
-        menuCaption += `\n╰──────────────┈⊷\n> *Reply with a number (1-${menuCategories.length}) to see commands*`;
+        menuCaption += `\n╰──────────────┈⊷\n*_🔢 Reply with a number (1-${menuCategories.length}) to see commands_*`;
 
         const contextInfo = {
             mentionedJid: [m.sender],
@@ -58,7 +60,7 @@ cmd({
         const sentMsg = await conn.sendMessage(
             from,
             {
-                image: { url: config.MENU_IMAGE_URL || 'https://i.ibb.co/bjPrbF84/3174.jpg' },
+                image: config.MENU_IMAGE_URL,
                 caption: menuCaption,
                 contextInfo
             },
@@ -72,7 +74,7 @@ cmd({
         menuCategories.forEach((cat, idx) => {
             menuData[(idx + 1).toString()] = {
                 title: `${cat.icon} *${cat.title}* ${cat.icon}`,
-                content: `╭━━━〔 *${cat.title}* 〕━━━┈⊷\n${getCommandsByCategory(cat.key)}\n╰━━━━━━━━━━━━━━━┈⊷\n> ${config.DESCRIPTION}`,
+                content: `*⎠👨‍💻 ᴋᴀᴠɪ-ᴍᴅ ʙʏ ᴋᴀᴠɪᴅᴜ ʀᴀꜱᴀɴɢᴀ 👨‍💻⎝*\n\n╭━━━〔 *${cat.title}* 〕━━━┈⊷\n${getCommandsByCategory(cat.key)}\n╰━━━━━━━━━━━━━━━┈⊷\n> ${config.DESCRIPTION}`,
                 image: true
             };
         });
@@ -91,14 +93,14 @@ cmd({
 
                     if (selectedMenu) {
                         await conn.sendMessage(senderID, {
-                            image: { url: config.MENU_IMAGE_URL || 'https://files.catbox.moe/3y5w8z.jpg' },
+                            image: config.MENU_IMAGE_URL,
                             caption: selectedMenu.content,
                             contextInfo
                         }, { quoted: receivedMsg });
                         await conn.sendMessage(senderID, { react: { text: '✅', key: receivedMsg.key } });
                     } else {
                         await conn.sendMessage(senderID, {
-                            text: `❌ Invalid Option!\nReply with a number between 1-${menuCategories.length}.`,
+                            text: `❌ Invalid Option!\nReply with a number between 1-${menuCategories.length}.\n\n◆ᴋᴀᴠɪ ᴍᴅ◆`,
                             contextInfo
                         }, { quoted: receivedMsg });
                     }
