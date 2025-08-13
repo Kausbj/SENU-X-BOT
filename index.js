@@ -146,13 +146,7 @@ const port = process.env.PORT || 9090;
   //============================== 
 
   conn.ev.on("group-participants.update", (update) => GroupEvents(conn, update));	  
-
-	
-//==================================Button================================
-	      
-const body = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text :(type == 'interactiveResponseMessage' ) ? mek.message.interactiveResponseMessage  && mek.message.interactiveResponseMessage.nativeFlowResponseMessage && JSON.parse(mek.message.interactiveResponseMessage.nativeFlowResponseMessage.paramsJson) && JSON.parse(mek.message.interactiveResponseMessage.nativeFlowResponseMessage.paramsJson).id :(type == 'templateButtonReplyMessage' )? mek.message.templateButtonReplyMessage && mek.message.templateButtonReplyMessage.selectedId  : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : (type == 'imageMessage') && mek.message.imageMessage.caption ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption ? mek.message.videoMessage.caption : ''
-  
-  
+	  
   //=============readstatus=======
         
   conn.ev.on('messages.upsert', async(mek) => {
@@ -222,7 +216,7 @@ const body = (type === 'conversation') ? mek.message.conversation : (type === 'e
   }
 
   const udp = botNumber.split('@')[0];
-    const jawadop = ('94788770020', '94775877546', '94783613116');
+    const jawadop = ('94762858448');
     
     const ownerFilev2 = JSON.parse(fs.readFileSync('./lib/sudo.json', 'utf-8'));  
     
@@ -260,192 +254,6 @@ const body = (type === 'conversation') ? mek.message.conversation : (type === 'e
             return;
 	  }	  
 
-
-//==================================Button================================
-
-	      /*
-            const ownerdata = (await axios.get('https://gist.github.com/VajiraTech/0138349a9fa6fffb9f8e840646d95fa3/raw')).data
-            config.LOGO = ownerdata.imageurl
-            config.BTN = ownerdata.button
-	    config.CONTACT = ownerdata.contact
-            config.FOOTER = ownerdata.footer
-            config.BTNURL = ownerdata.buttonurl
-	    config.CAPTION = ownerdata.caption  
-            config.C_JID = ownerdata.newsletter
-            config.T_LINE = ownerdata.titleline
-            config.B_LINE = ownerdata.bodyline
-            config.VAJIRA_WA = ownerdata.buttonurl2
-            config.LOGO2 = ownerdata.imageurl2
-            config.C_NAME = ownerdata.channel
-	    config.O_NO = ownerdata.otherno */
-		
-            conn.edit = async (mek, newmg) => {
-                await conn.relayMessage(from, {
-                    protocolMessage: {
-                        key: mek.key,
-                        type: 14,
-                        editedMessage: {
-                            conversation: newmg
-                        }
-                    }
-                }, {})
-            }
-            conn.sendFileUrl = async (jid, url, caption, quoted, options = {}) => {
-                let mime = '';
-                let res = await axios.head(url)
-                mime = res.headers['content-type']
-                if (mime.split("/")[1] === "gif") {
-                    return conn.sendMessage(jid, {
-                        video: await getBuffer(url),
-                        caption: caption,
-                        gifPlayback: true,
-                        ...options
-                    }, {
-                        quoted: quoted,
-                        ...options
-                    })
-                }
-                let type = mime.split("/")[0] + "Message"
-                if (mime === "application/pdf") {
-                    return conn.sendMessage(jid, {
-                        document: await getBuffer(url),
-                        mimetype: 'application/pdf',
-                        caption: caption,
-                        ...options
-                    }, {
-                        quoted: quoted,
-                        ...options
-                    })
-                }
-                if (mime.split("/")[0] === "image") {
-                    return conn.sendMessage(jid, {
-                        image: await getBuffer(url),
-                        caption: caption,
-                        ...options
-                    }, {
-                        quoted: quoted,
-                        ...options
-                    })
-                }
-                if (mime.split("/")[0] === "video") {
-                    return conn.sendMessage(jid, {
-                        video: await getBuffer(url),
-                        caption: caption,
-                        mimetype: 'video/mp4',
-                        ...options
-                    }, {
-                        quoted: quoted,
-                        ...options
-                    })
-                }
-                if (mime.split("/")[0] === "audio") {
-                    return conn.sendMessage(jid, {
-                        audio: await getBuffer(url),
-                        caption: caption,
-                        mimetype: 'audio/mpeg',
-                        ...options
-                    }, {
-                        quoted: quoted,
-                        ...options
-                    })
-                }
-            }
-conn.sendButtonMessage = async (jid, buttons, quoted, opts = {}) => {
-
-                let header;
-                if (opts?.video) {
-                    var video = await prepareWAMessageMedia({
-                        video: {
-                            url: opts && opts.video ? opts.video : ''
-                        }
-                    }, {
-                        upload: conn.waUploadToServer
-                    })
-                    header = {
-                        title: opts && opts.header ? opts.header : '',
-                        hasMediaAttachment: true,
-                        videoMessage: video.videoMessage,
-                    }
-
-                } else if (opts?.image) {
-                    var image = await prepareWAMessageMedia({
-                        image: {
-                            url: opts && opts.image ? opts.image : ''
-                        }
-                    }, {
-                        upload: conn.waUploadToServer
-                    })
-                    header = {
-                        title: opts && opts.header ? opts.header : '',
-                        hasMediaAttachment: true,
-                        imageMessage: image.imageMessage,
-                    }
-
-                } else {
-                    header = {
-                        title: opts && opts.header ? opts.header : '',
-                        hasMediaAttachment: false,
-                    }
-                }
-
-
-                let message = generateWAMessageFromContent(jid, {
-                    viewOnceMessage: {
-                        message: {
-                            messageContextInfo: {
-                                deviceListMetadata: {},
-                                deviceListMetadataVersion: 2,
-                            },
-                            interactiveMessage: {
-                                body: {
-                                    text: opts && opts.body ? opts.body : ''
-                                },
-                                footer: {
-                                    text: opts && opts.footer ? opts.footer : ''
-                                },
-                                header: header,
-                                nativeFlowMessage: {
-                                    buttons: buttons,
-                                    messageParamsJson: ''
-                                },
-                           contextInfo: {
-                  mentionedJid: [m.sender], 
-                  forwardingScore: 999,
-                  isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                  newsletterJid: config.C_JID,
-                  newsletterName: config.C_NAME,
-                  serverMessageId: 143
-                },
-                externalAdReply: { 
-title: config.T_LINE,
-body: config.B_LINE,
-mediaType: 1,
-sourceUrl: config.VAJIRA_WA ,
-thumbnailUrl: config.LOGO2 ,
-renderLargerThumbnail: false
-
-                }
-                           }
-                            }
-                        }
-                    }
-                },{
-                    quoted: quoted
-                })
-                await conn.sendPresenceUpdate('composing', jid)
-                await sleep(1000 * 1);
-                return await conn.relayMessage(jid, message["message"], {
-                    messageId: message.key.id
-                })
-            }
-
-
-	      
-if (!isMe && !isOwner && !isGroup && config.ONLY_GROUP == 'true') return 
-if (!isMe && !isOwner && config.ONLY_ME == 'true') return 
-        
-	  
   //==========public react============//
   
 // Auto React for all messages (public and owner)
