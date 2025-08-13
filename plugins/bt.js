@@ -28,24 +28,24 @@ cmd({
     pattern: "menu5",
     desc: "Show interactive menu system",
     category: "menu",
-    react: "🧾",
+    react: "🏛️",
     filename: __filename
 }, async (conn, mek, m, { from }) => {
     try {
         // Main Menu Caption
         let menuCaption = `*⎠👨‍💻 ᴋᴀᴠɪ ᴍᴅ ʙʏ ᴋᴀᴠɪᴅᴜ ʀᴀꜱᴀɴɢᴀ 👨‍💻⎝* 
         
-╭━━━〔 *🫧 𝘒𝘈𝘝𝘐 -𝘔𝘋 🫧* 〕━━━╌●◈◆
+╭━━━〔 *🏛️ 𝘒𝘈𝘝𝘐 -𝘔𝘋 🏛️* 〕━━━╼◈
 > ☬ Owner : *${config.OWNER_NAME}*
 > ☬ Mode : *[${config.MODE}]*
 > ☬ Prefix : *[${config.PREFIX}]*
 > ☬ Version : *0.0.1 Beta*
 > ☬ Commands : *${commands.length}*
-╰━━━━━━━━━━━━━━━╌●◈◆
+╰━━━━━━━━━━━━━━━╼◈
 ╭━━〔 *🧚‍♂️ Menu List 🧚‍♂️* 〕━━┈⊷`;
 
         menuCategories.forEach((cat, index) => {
-            menuCaption += `\n│ *➤ ${index + 1} *${cat.title}*`;
+            menuCaption += `\n│ *➤ ${index + 1} ${cat.title}*`;
         });
 
         menuCaption += `\n╰──────────────┈⊷\n*_🔢 Reply with a number (1-${menuCategories.length}) to see commands_*`;
@@ -74,7 +74,7 @@ cmd({
         menuCategories.forEach((cat, idx) => {
             menuData[(idx + 1).toString()] = {
                 title: `${cat.icon} *${cat.title}* ${cat.icon}`,
-                content: `*⎠👨‍💻 ᴋᴀᴠɪ-ᴍᴅ ʙʏ ᴋᴀᴠɪᴅᴜ ʀᴀꜱᴀɴɢᴀ 👨‍💻⎝*\n\n╭━━━〔 *${cat.title}* 〕━━━┈⊷\n${getCommandsByCategory(cat.key)}\n╰━━━━━━━━━━━━━━━┈⊷\n> ${config.DESCRIPTION}`,
+                content: `*⎠👨‍💻 ᴋᴀᴠɪ-ᴍᴅ ʙʏ ᴋᴀᴠɪᴅᴜ ʀᴀꜱᴀɴɢᴀ 👨‍💻⎝*\n\n╭━━━〔 *🪺 ${cat.title} 🪺* 〕━━━┈⊷\n${getCommandsByCategory(cat.key)}\n╰━━━━━━━━━━━━━━━┈⊷\n> ${config.DESCRIPTION}`,
                 image: true
             };
         });
