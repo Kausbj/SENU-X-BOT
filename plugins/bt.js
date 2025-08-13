@@ -1,8 +1,8 @@
-const config = require('../settings')
+const config = require('../config')
 const os = require('os')
 const fs = require('fs')
 const l = console.log
-const { cmd, commands } = require('../lib/command')
+const { cmd, commands } = require('../command')
 const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, Func, fetchJson} = require('../lib/functions')
 let cap = '👨‍💻 ꜱᴇɴᴜ x ʙʏ ꜱxᴅ ᴛᴇᴀᴍ 👨‍💻'
 const si = require('systeminformation')
