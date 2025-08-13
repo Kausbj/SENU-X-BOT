@@ -1,119 +1,117 @@
-// menu2 without buttons (image + caption only)
+const config = require('../config');
+const { cmd, commands } = require('../command');
+const { runtime } = require('../lib/functions');
 
-const config = require('../config')
-const { cmd, commands } = require('../command')
-const { runtime } = require('../lib/functions')
+// Categories with names, icons, and display numbers
+const menuCategories = [
+    { key: 'download', icon: '📥', title: 'Download Menu' },
+    { key: 'group', icon: '👥', title: 'Group Menu' },
+    { key: 'fun', icon: '😄', title: 'Fun Menu' },
+    { key: 'owner', icon: '👑', title: 'Owner Menu' },
+    { key: 'ai', icon: '🤖', title: 'AI Menu' },
+    { key: 'anime', icon: '🎎', title: 'Anime Menu' },
+    { key: 'convert', icon: '🔄', title: 'Convert Menu' },
+    { key: 'other', icon: '📌', title: 'Other Menu' },
+    { key: 'reactions', icon: '💞', title: 'Reactions Menu' },
+    { key: 'main', icon: '🏠', title: 'Main Menu' }
+];
+
+// Helper to get commands by category
+function getCommandsByCategory(cat) {
+    return commands
+        .filter(c => c.category === cat && !c.dontAddCommandList)
+        .map(c => `*◉ :* ${c.pattern}`)
+        .join("\n") || "_No commands available_";
+}
 
 cmd({
-  pattern: "menu5",
-  react: "📂",
-  alias: ["help"],
-  desc: "Get bot's command list.",
-  category: "main",
-  use: '.menu',
-  filename: __filename
-},
-async (conn, mek, m, { from, prefix, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
-  try {
-    // build category helpers
-    const listByCat = (cat) => {
-      let out = ''
-      for (let i = 0; i < commands.length; i++) {
-        if (commands[i].category === cat) {
-          if (!commands[i].dontAddCommandList) {
-            out += `*◉ :* ${commands[i].pattern}\n`
-          }
-        }
-      }
-      return out
-    }
-
-    const menuc1 = listByCat('download')
-    const menuc2 = listByCat('search')
-    const menuc3 = listByCat('convert')
-    const menuc4 = listByCat('logo')
-    const menuc5 = listByCat('main')
-    const menuc6 = listByCat('group')
-    const menuc7 = listByCat('bug')
-    const menuc8 = listByCat('movie')
-    const menuc9 = listByCat('other')
-
-    const menumg = `*Hellow👸* ${pushname}
-
-*╭─     ᴄᴏᴍᴍᴀɴᴅꜱ ᴘᴀɴᴇʟ*
-*│🕵️‍♂️ 𝘙𝘶𝘯 𝘛𝘪𝘮𝘦 -* ${runtime(process.uptime())} 
-*│🕵️‍♂️ 𝘙𝘢𝘮 𝘜𝘴𝘦 -* ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}MB / ${Math.round(require('os').totalmem() / 1024 / 1024)}MB
-*╰──────────●●►*
-*👸 SENU X BOT COMMAND PANEL*
-
-> *╭──────────●●►*
-> *│🧙‍♂️ DOWNLOAD COMMANDS*
-> *│   ───────*
-${menuc1}*╰───────────●●►*
-
-> *╭──────────●●►*
-> *│🧙‍♂️ SEARCH COMMANDS*
-> *│   ───────*
-${menuc2}*╰───────────●●►*
-
-> *╭──────────●●►*
-> *│🧙‍♂️ CONVERT COMMANDS*
-> *│   ───────*
-${menuc3}*╰───────────●●►*
-
-> *╭──────────●●►*
-> *│🧙‍♂️ LOGO COMMANDS*
-> *│   ───────*
-${menuc4}*╰───────────●●►*
-
-> *╭──────────●●►*
-> *│🧙‍♂️ MAIN COMMANDS*
-> *│   ───────*
-${menuc5}*╰───────────●●►*
-
-> *╭──────────●●►*
-> *│🧙‍♂️ GROUP COMMANDS*
-> *│   ───────*
-${menuc6}*╰───────────●●►*
-
-> *╭──────────●●►*
-> *│🧙‍♂️ BUG COMMANDS*
-> *│   ───────*
-${menuc7}*╰───────────●●►*
-
-> *╭──────────●●►*
-> *│🧙‍♂️ MOVIE COMMANDS*
-> *│   ───────*
-${menuc8}*╰───────────●●►*
-
-> *╭──────────●●►*
-> *│🧙‍♂️ OTHER COMMANDS*
-> *│   ───────*
-${menuc9}*╰───────────●●►*
-
-👨‍💻 ᴘᴏᴡᴇʀᴇᴅ ʙʏ ꜱᴇɴᴜ x ʙᴏᴛ 👨‍💻
-${config.FOOTER ? `\n${config.FOOTER}` : ''}`
-
-    // Prepare image payload (URL or Buffer supported)
-    const imagePayload = (typeof config.LOGO === 'string')
-      ? { url: config.LOGO }
-      : config.LOGO
-
-    // Send as normal image+caption (NO BUTTONS)
-    await conn.sendMessage(
-      from,
-      { image: imagePayload, caption: menumg },
-      { quoted: m }
-    )
-
-  } catch (e) {
-    console.log('menu2 error:', e)
+    pattern: "menu5",
+    desc: "Show interactive menu system",
+    category: "menu",
+    react: "🧾",
+    filename: __filename
+}, async (conn, mek, m, { from }) => {
     try {
-      // Fallback: send as plain text if image fails
-      await conn.sendMessage(from, { text: menumg }, { quoted: m })
-    } catch (err) {
-      console.log('menu2 fallback error:', err)
-      reply('*ERROR !!*')
+        // Main Menu Caption
+        let menuCaption = `╭━━━〔 *🧚‍♂️𝐒ᴇɴᴜ x 𝐁ᴏᴛ🧚‍♂️* 〕━━━┈⊷
+│ ✓ Owner : *${config.OWNER_NAME}*
+│ ✓ Mode : *[${config.MODE}]*
+│ ✓ Prefix : *[${config.PREFIX}]*
+│ ✓ Version : *5.0.0 Beta*
+│ ✓ Commands : *${commands.length}*
+╰━━━━━━━━━━━━━━━┈⊷
+╭━━〔 *🧚‍♂️ Menu List 🧚‍♂️* 〕━━┈⊷`;
+
+        menuCategories.forEach((cat, index) => {
+            menuCaption += `\n│❯❯ ${index + 1} *${cat.title}*`;
+        });
+
+        menuCaption += `\n╰──────────────┈⊷\n> *Reply with a number (1-${menuCategories.length}) to see commands*`;
+
+        const contextInfo = {
+            mentionedJid: [m.sender],
+            forwardingScore: 999,
+            isForwarded: true
+        };
+
+        // Send Menu Image
+        const sentMsg = await conn.sendMessage(
+            from,
+            {
+                image: { url: config.MENU_IMAGE_URL || 'https://i.ibb.co/bjPrbF84/3174.jpg' },
+                caption: menuCaption,
+                contextInfo
+            },
+            { quoted: mek }
+        );
+
+        const messageID = sentMsg.key.id;
+
+        // Build dynamic menu data
+        const menuData = {};
+        menuCategories.forEach((cat, idx) => {
+            menuData[(idx + 1).toString()] = {
+                title: `${cat.icon} *${cat.title}* ${cat.icon}`,
+                content: `╭━━━〔 *${cat.title}* 〕━━━┈⊷\n${getCommandsByCategory(cat.key)}\n╰━━━━━━━━━━━━━━━┈⊷\n> ${config.DESCRIPTION}`,
+                image: true
+            };
+        });
+
+        // Listen for replies
+        const handler = async (msgData) => {
+            try {
+                const receivedMsg = msgData.messages[0];
+                if (!receivedMsg?.message) return;
+
+                const isReplyToMenu = receivedMsg.message?.extendedTextMessage?.contextInfo?.stanzaId === messageID;
+                if (isReplyToMenu) {
+                    const replyText = receivedMsg.message.conversation || receivedMsg.message.extendedTextMessage?.text;
+                    const selectedMenu = menuData[replyText];
+                    const senderID = receivedMsg.key.remoteJid;
+
+                    if (selectedMenu) {
+                        await conn.sendMessage(senderID, {
+                            image: { url: config.MENU_IMAGE_URL || 'https://files.catbox.moe/3y5w8z.jpg' },
+                            caption: selectedMenu.content,
+                            contextInfo
+                        }, { quoted: receivedMsg });
+                        await conn.sendMessage(senderID, { react: { text: '✅', key: receivedMsg.key } });
+                    } else {
+                        await conn.sendMessage(senderID, {
+                            text: `❌ Invalid Option!\nReply with a number between 1-${menuCategories.length}.`,
+                            contextInfo
+                        }, { quoted: receivedMsg });
+                    }
+                }
+            } catch (e) {
+                console.error('Reply Handler Error:', e);
+            }
+        };
+
+        conn.ev.on("messages.upsert", handler);
+        setTimeout(() => conn.ev.off("messages.upsert", handler), 300000);
+
+    } catch (e) {
+        console.error('Menu Error:', e);
     }
-  }
-})
+});
