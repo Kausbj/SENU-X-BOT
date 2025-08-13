@@ -60,7 +60,7 @@ cmd({
         const sentMsg = await conn.sendMessage(
             from,
             {
-                image: config.MENU_IMAGE_URL,
+                image: { url: config.MENU_IMAGE_URL || 'https://files.catbox.moe/p8knwg.jpg' },
                 caption: menuCaption,
                 contextInfo
             },
@@ -93,7 +93,7 @@ cmd({
 
                     if (selectedMenu) {
                         await conn.sendMessage(senderID, {
-                            image: config.MENU_IMAGE_URL,
+                            image: { url: config.MENU_IMAGE_URL || 'https://files.catbox.moe/p8knwg.jpg' },
                             caption: selectedMenu.content,
                             contextInfo
                         }, { quoted: receivedMsg });
