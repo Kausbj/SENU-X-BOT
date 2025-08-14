@@ -10,8 +10,8 @@ function replaceYouTubeID(url) {
 }
 
 cmd({
-    pattern: "play3",
-    alias: ["mp3", "ytmp3"],
+    pattern: "song6",
+    alias: ["yt", "play"],
     react: "🎵",
     desc: "Download Ytmp3",
     category: "download",
@@ -34,17 +34,17 @@ cmd({
 
         const { url, title, image, timestamp, ago, views, author } = data.results[0];
 
-        let info = `🍄 *SENU-MD SONG DL* 🍄\n\n` +
-            `🎵 *Title:* ${title || "Unknown"}\n` +
+        let info = `🎵 *KAVI-MD SONG DL* 🎵\n\n` +
+            `🏮 *Title:* ${title || "Unknown"}\n` +
             `⏳ *Duration:* ${timestamp || "Unknown"}\n` +
             `👀 *Views:* ${views || "Unknown"}\n` +
             `🌏 *Release Ago:* ${ago || "Unknown"}\n` +
             `👤 *Author:* ${author?.name || "Unknown"}\n` +
             `🖇 *Url:* ${url || "Unknown"}\n\n` +
-            `🔽 *Reply with your choice:*\n` +
+            `🔢 *_Reply with your choice:-_*\n` +
             `1.1 *Audio Type* 🎵\n` +
             `1.2 *Document Type* 📁\n\n` +
-            `${config.FOOTER || "𓆩JesterTechX𓆪"}`;
+            `${config.FOOTER || "> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴋᴀᴠɪᴅᴜ ʀᴀꜱᴀɴɢᴀ 👨‍💻*"}`;
 
         const sentMsg = await conn.sendMessage(from, { image: { url: image }, caption: info }, { quoted: mek });
         const messageID = sentMsg.key.id;
@@ -67,25 +67,25 @@ cmd({
                 let response;
                 
                 if (userReply === "1.1") {
-                    msg = await conn.sendMessage(from, { text: "⏳ Processing..." }, { quoted: mek });
+                    msg = await conn.sendMessage(from, { text: "*_🎼 Pending your request. . . .⌛_*" }, { quoted: mek });
                     response = await dy_scrap.ytmp3(`https://youtube.com/watch?v=${id}`);
                     let downloadUrl = response?.result?.download?.url;
                     if (!downloadUrl) return await reply("❌ Download link not found!");
                     type = { audio: { url: downloadUrl }, mimetype: "audio/mpeg" };
                     
                 } else if (userReply === "1.2") {
-                    msg = await conn.sendMessage(from, { text: "⏳ Processing..." }, { quoted: mek });
+                    msg = await conn.sendMessage(from, { text: "*_🎼 Pending your request. . . .⌛_*" }, { quoted: mek });
                     const response = await dy_scrap.ytmp3(`https://youtube.com/watch?v=${id}`);
                     let downloadUrl = response?.result?.download?.url;
                     if (!downloadUrl) return await reply("❌ Download link not found!");
-                    type = { document: { url: downloadUrl }, fileName: `${title}.mp3`, mimetype: "audio/mpeg", caption: title };
+                    type = { document: { url: downloadUrl }, fileName: `♬ ᴋᴀᴠɪ-ᴍᴅ ♬ ${title}.mp3`, mimetype: "audio/mpeg", caption: ${config.FOOTER} };
                     
                 } else { 
                     return await reply("❌ Invalid choice! Reply with 1.1 or 1.2.");
                 }
 
                 await conn.sendMessage(from, type, { quoted: mek });
-                await conn.sendMessage(from, { text: '✅ Media Upload Successful ✅', edit: msg.key });
+                await conn.sendMessage(from, { text: '*_Your request upload successful ☑️_*', edit: msg.key });
 
             } catch (error) {
                 console.error(error);
