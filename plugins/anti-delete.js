@@ -1,3 +1,6 @@
+
+const { updateEnv, readEnv } = require('../lib/databas');
+const EnvVar = require('../lib/mongodbenv');
 const { cmd } = require('../command');
 const { getAnti, setAnti } = require('../data/antidel');
 
