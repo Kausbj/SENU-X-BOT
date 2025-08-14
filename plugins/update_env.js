@@ -1,10 +1,10 @@
 
-const { updateEnv, readEnv } = require('../lib/database');
+const { updateEnv, readEnv } = require('../lib/databas');
 const EnvVar = require('../lib/mongodbenv');
 const { cmd } = require('../command');
 
 cmd({
-    pattern: "update",
+    pattern: "u",
     alias: ["updateenv"],
     react: "📈",
     desc: "Check and update environment variables",
