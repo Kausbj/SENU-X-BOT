@@ -1,5 +1,6 @@
 const config = require('../config');
 const { cmd, commands } = require('../command');
+const os = require("os");
 const { runtime } = require('../lib/functions');
 
 // Categories with names, icons, and display numbers
@@ -25,7 +26,7 @@ function getCommandsByCategory(cat) {
 }
 
 cmd({
-    pattern: "menu6",
+    pattern: "menu",
     desc: "Show interactive menu system",
     category: "menu",
     react: "🏛️",
@@ -33,22 +34,29 @@ cmd({
 }, async (conn, mek, m, { from, pushname }) => {
     try {
         // Main Menu Caption
-        let menuCaption = `*⎠👨‍💻 ᴋᴀᴠɪ ᴍᴅ ʙʏ ᴋᴀᴠɪᴅᴜ ʀᴀꜱᴀɴɢᴀ 👨‍💻⎝* 
+        let menuCaption = `👋 Hellow ${pushname}
+
+
+_*ᴛʜɪꜱ ᴋᴀᴠɪ ᴍᴅ ᴡʜᴀᴛꜱᴀᴘᴘ ʙᴏᴛ ɪꜱ ᴍᴀᴅᴇ ꜰᴏʀ ʏᴏᴜʀ ᴇᴀꜱʏ ᴛᴏ ᴜꜱᴇ. ᴛʜɪꜱ ʙᴏᴛ ɪꜱ ᴄᴜʀʀᴇɴᴛʟʏ ᴀᴄᴛɪᴠᴇ 🍇*_
+
         
 ╭━━━〔 *🏛️ 𝘒𝘈𝘝𝘐 -𝘔𝘋 🏛️* 〕━━━╼◈
+> ☬ Date Today :* ${new Date().toLocaleDateString("en-GB", { timeZone: "Asia/Colombo" })}
+> ☬ Time Now :* ${new Date().toLocaleTimeString("en-GB", { timeZone: "Asia/Colombo" })}
 > ☬ Owner : *${config.OWNER_NAME}*
-> ☬ Mode : *[${config.MODE}]*
-> ☬ Prefix : *[${config.PREFIX}]*
+> ☬ Mode : *❲ ${config.MODE} ❳*
+> ☬ Prefix : *❲ ${config.PREFIX} ❳*
 > ☬ Version : *0.0.1 Beta*
 > ☬ Commands : *${commands.length}*
 ╰━━━━━━━━━━━━━━━╼◈
-╭━━〔 *🧚‍♂️ Menu List 🧚‍♂️* 〕━━┈⊷`;
+
+╭━━〔 *⚓ Menu List ⚓* 〕━━┈⊷`;
 
         menuCategories.forEach((cat, index) => {
             menuCaption += `\n│ *➤ ${index + 1} ${cat.title}*`;
         });
 
-        menuCaption += `\n╰──────────────┈⊷\n*_🔢 Reply with a number (1-${menuCategories.length}) to see commands_*`;
+        menuCaption += `\n╰──────────────┈⊷\n*_🔢 Reply with a number (1-${menuCategories.length}) to see commands_*\n\n*☘️ ꜰᴏʟʟᴏᴡ ᴍʏ ᴄʜᴀɴɴᴇʟ :* https://whatsapp.com/channel/0029Vb5xFPHGE56jTnm4ZD2k/246\n\n*⎠👨‍💻 ᴋᴀᴠɪ ᴍᴅ ʙʏ ᴋᴀᴠɪᴅᴜ ʀᴀꜱᴀɴɢᴀ 👨‍💻⎝*`;
 
         const contextInfo = {
             mentionedJid: [m.sender],
@@ -74,7 +82,7 @@ cmd({
         menuCategories.forEach((cat, idx) => {
             menuData[(idx + 1).toString()] = {
                 title: `${cat.icon} *${cat.title}* ${cat.icon}`,
-                content: `*⎠👨‍💻 ᴋᴀᴠɪ-ᴍᴅ ʙʏ ᴋᴀᴠɪᴅᴜ ʀᴀꜱᴀɴɢᴀ 👨‍💻⎝*\n\n╭━━━〔 *🪺 ${cat.title} 🪺* 〕━━━┈⊷\n${getCommandsByCategory(cat.key)}\n╰━━━━━━━━━━━━━━━┈⊷\n> ${config.DESCRIPTION}`,
+                content: `\n\n╭━━━〔 *🪺 ${cat.title} 🪺* 〕━━━┈⊷\n${getCommandsByCategory(cat.key)}\n╰━━━━━━━━━━━━━━━┈⊷\n> ${config.FOOTER}`,
                 image: true
             };
         });
