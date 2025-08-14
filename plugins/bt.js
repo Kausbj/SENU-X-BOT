@@ -1,119 +1,118 @@
 const config = require('../config');
-const { cmd, commands } = require('../command');
-const { runtime } = require('../lib/functions');
+const { cmd } = require('../command');
+const DY_SCRAP = require('@dark-yasiya/scrap');
+const dy_scrap = new DY_SCRAP();
 
-// Categories with names, icons, and display numbers
-const menuCategories = [
-    { key: 'download', icon: '📥', title: 'Download Menu' },
-    { key: 'group', icon: '👥', title: 'Group Menu' },
-    { key: 'fun', icon: '😄', title: 'Fun Menu' },
-    { key: 'owner', icon: '👑', title: 'Owner Menu' },
-    { key: 'ai', icon: '🤖', title: 'AI Menu' },
-    { key: 'anime', icon: '🎎', title: 'Anime Menu' },
-    { key: 'convert', icon: '🔄', title: 'Convert Menu' },
-    { key: 'other', icon: '📌', title: 'Other Menu' },
-    { key: 'reactions', icon: '💞', title: 'Reactions Menu' },
-    { key: 'main', icon: '🏠', title: 'Main Menu' }
-];
-
-// Helper to get commands by category
-function getCommandsByCategory(cat) {
-    return commands
-        .filter(c => c.category === cat && !c.dontAddCommandList)
-        .map(c => `*◉ :* ${c.pattern}`)
-        .join("\n") || "_No commands available_";
+// Corrected YouTube ID extractor
+function replaceYouTubeID(url) {
+  const regex = /(?:youtube\.com\/(?:.*v=|.*\/)|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/;
+  const match = url.match(regex);
+  return match ? match[1] : null;
 }
 
 cmd({
-    pattern: "menu5",
-    desc: "Show interactive menu system",
-    category: "menu",
-    react: "🏛️",
-    filename: __filename
-}, async (conn, mek, m, { from }) => {
-    try {
-        // Main Menu Caption
-        let menuCaption = `*⎠👨‍💻 ᴋᴀᴠɪ ᴍᴅ ʙʏ ᴋᴀᴠɪᴅᴜ ʀᴀꜱᴀɴɢᴀ 👨‍💻⎝* 
-        
-╭━━━〔 *🏛️ 𝘒𝘈𝘝𝘐 -𝘔𝘋 🏛️* 〕━━━╼◈
-> ☬ Owner : *${config.OWNER_NAME}*
-> ☬ Mode : *[${config.MODE}]*
-> ☬ Prefix : *[${config.PREFIX}]*
-> ☬ Version : *0.0.1 Beta*
-> ☬ Commands : *${commands.length}*
-╰━━━━━━━━━━━━━━━╼◈
-╭━━〔 *🧚‍♂️ Menu List 🧚‍♂️* 〕━━┈⊷`;
+  pattern: "play4",
+  alias: ["mp4", "ytv", "video"],
+  react: "🎬",
+  desc: "Download Ytmp4 (video)",
+  category: "download",
+  use: ".play4 <query|url>",
+  filename: __filename
+}, async (conn, m, mek, { from, q, reply }) => {
+  try {
+    if (!q) return await reply("❌ Please provide a Query or Youtube URL!");
 
-        menuCategories.forEach((cat, index) => {
-            menuCaption += `\n│ *➤ ${index + 1} ${cat.title}*`;
-        });
-
-        menuCaption += `\n╰──────────────┈⊷\n*_🔢 Reply with a number (1-${menuCategories.length}) to see commands_*`;
-
-        const contextInfo = {
-            mentionedJid: [m.sender],
-            forwardingScore: 999,
-            isForwarded: true
-        };
-
-        // Send Menu Image
-        const sentMsg = await conn.sendMessage(
-            from,
-            {
-                image: { url: config.MENU_IMAGE_URL || 'https://files.catbox.moe/p8knwg.jpg' },
-                caption: menuCaption,
-                contextInfo
-            },
-            { quoted: mek }
-        );
-
-        const messageID = sentMsg.key.id;
-
-        // Build dynamic menu data
-        const menuData = {};
-        menuCategories.forEach((cat, idx) => {
-            menuData[(idx + 1).toString()] = {
-                title: `${cat.icon} *${cat.title}* ${cat.icon}`,
-                content: `*⎠👨‍💻 ᴋᴀᴠɪ-ᴍᴅ ʙʏ ᴋᴀᴠɪᴅᴜ ʀᴀꜱᴀɴɢᴀ 👨‍💻⎝*\n\n╭━━━〔 *🪺 ${cat.title} 🪺* 〕━━━┈⊷\n${getCommandsByCategory(cat.key)}\n╰━━━━━━━━━━━━━━━┈⊷\n> ${config.DESCRIPTION}`,
-                image: true
-            };
-        });
-
-        // Listen for replies
-        const handler = async (msgData) => {
-            try {
-                const receivedMsg = msgData.messages[0];
-                if (!receivedMsg?.message) return;
-
-                const isReplyToMenu = receivedMsg.message?.extendedTextMessage?.contextInfo?.stanzaId === messageID;
-                if (isReplyToMenu) {
-                    const replyText = receivedMsg.message.conversation || receivedMsg.message.extendedTextMessage?.text;
-                    const selectedMenu = menuData[replyText];
-                    const senderID = receivedMsg.key.remoteJid;
-
-                    if (selectedMenu) {
-                        await conn.sendMessage(senderID, {
-                            image: { url: config.MENU_IMAGE_URL || 'https://files.catbox.moe/p8knwg.jpg' },
-                            caption: selectedMenu.content,
-                            contextInfo
-                        }, { quoted: receivedMsg });
-                        await conn.sendMessage(senderID, { react: { text: '✅', key: receivedMsg.key } });
-                    } else {
-                        await conn.sendMessage(senderID, {
-                            text: `❌ Invalid Option!\nReply with a number between 1-${menuCategories.length}.\n\n◆ᴋᴀᴠɪ ᴍᴅ◆`,
-                            contextInfo
-                        }, { quoted: receivedMsg });
-                    }
-                }
-            } catch (e) {
-                console.error('Reply Handler Error:', e);
-            }
-        };
-
-        conn.ev.on("messages.upsert", handler);
-        setTimeout(() => conn.ev.off("messages.upsert", handler), 300000);
-
-    } catch (e) {
-        console.error('Menu Error:', e);
+    // get ID (if url) or search
+    let id = q.startsWith("http") ? replaceYouTubeID(q) : null;
+    if (!id) {
+      const searchResults = await dy_scrap.ytsearch(q);
+      if (!searchResults?.results?.length) return await reply("❌ No results found!");
+      id = searchResults.results[0].videoId;
     }
+
+    const data = await dy_scrap.ytsearch(`https://youtube.com/watch?v=${id}`);
+    if (!data?.results?.length) return await reply("❌ Failed to fetch video!");
+    const { url, title, image, timestamp, ago, views, author } = data.results[0];
+
+    let info = `🍄 *SENU-MD VIDEO DL* 🍄\n\n` +
+      `🎬 *Title:* ${title || "Unknown"}\n` +
+      `⏳ *Duration:* ${timestamp || "Unknown"}\n` +
+      `👀 *Views:* ${views || "Unknown"}\n` +
+      `🌏 *Release Ago:* ${ago || "Unknown"}\n` +
+      `👤 *Author:* ${author?.name || "Unknown"}\n` +
+      `🖇 *Url:* ${url || "Unknown"}\n\n` +
+      `🔽 *Reply with your choice:*\n` +
+      `2.1 *Video Type (Stream)* 🎥\n` +
+      `2.2 *Document Type (MP4 File)* 📁\n\n` +
+      `${config.FOOTER || "𓆩JesterTechX𓆪"}`;
+
+    const sentMsg = await conn.sendMessage(from, { image: { url: image }, caption: info }, { quoted: mek });
+    await conn.sendMessage(from, { react: { text: '🎬', key: sentMsg.key } });
+
+    // single-use handler
+    const handler = async (messageUpdate) => {
+      try {
+        const mekInfo = messageUpdate?.messages?.[0];
+        if (!mekInfo?.message) return;
+        // ensure it's a reply to our sent message
+        const context = mekInfo.message.extendedTextMessage?.contextInfo;
+        const isReplyToSentMsg = context?.stanzaId === sentMsg.key.id || (mekInfo.key?.remoteJid === from && mekInfo.key?.id && mekInfo.key?.id === sentMsg.key.id);
+        if (!isReplyToSentMsg) return;
+
+        const messageText = mekInfo.message.conversation || mekInfo.message.extendedTextMessage?.text || "";
+        const userReply = messageText.trim();
+
+        // remove listener immediately (one-time)
+        try { conn.ev.off('messages.upsert', handler); } catch (e) { /* ignore */ }
+
+        if (userReply === "2.1") {
+          const processingMsg = await conn.sendMessage(from, { text: "⏳ Preparing stream..." }, { quoted: mek });
+          const response = await dy_scrap.ytmp4(`https://youtube.com/watch?v=${id}`); // ytmp4 for video
+          const downloadUrl = response?.result?.download?.url || response?.result?.url;
+          if (!downloadUrl) return await reply("❌ Download link not found!");
+
+          // send as video (stream). Note: Baileys will fetch the url and stream it if allowed.
+          const videoMsg = { video: { url: downloadUrl }, mimetype: "video/mp4", fileName: `${title}.mp4`, caption: title };
+          await conn.sendMessage(from, videoMsg, { quoted: mek });
+          await conn.sendMessage(from, { text: '✅ Video stream sent ✅', edit: processingMsg.key });
+
+        } else if (userReply === "2.2") {
+          const processingMsg = await conn.sendMessage(from, { text: "⏳ Preparing file..." }, { quoted: mek });
+          const response = await dy_scrap.ytmp4(`https://youtube.com/watch?v=${id}`);
+          const downloadUrl = response?.result?.download?.url || response?.result?.url;
+          if (!downloadUrl) return await reply("❌ Download link not found!");
+
+          const docMsg = {
+            document: { url: downloadUrl },
+            fileName: `${title}.mp4`,
+            mimetype: "video/mp4",
+            caption: title
+          };
+          await conn.sendMessage(from, docMsg, { quoted: mek });
+          await conn.sendMessage(from, { text: '✅ File upload sent ✅', edit: processingMsg.key });
+
+        } else {
+          return await reply("❌ Invalid choice! Reply with 2.1 or 2.2.");
+        }
+
+      } catch (error) {
+        console.error(error);
+        try { conn.ev.off('messages.upsert', handler); } catch (e) { }
+        await reply(`❌ *An error occurred while processing:* ${error.message || "Error!"}`);
+      }
+    };
+
+    // attach listener
+    conn.ev.on('messages.upsert', handler);
+
+    // optional: auto-remove listener after X ms to avoid leaks (e.g., 2 minutes)
+    setTimeout(() => {
+      try { conn.ev.off('messages.upsert', handler); } catch (e) { }
+    }, 2 * 60 * 1000);
+
+  } catch (error) {
+    console.error(error);
+    try { await conn.sendMessage(from, { react: { text: '❌', key: mek.key } }); } catch (e) {}
+    await reply(`❌ *An error occurred:* ${error.message || "Error!"}`);
+  }
 });
