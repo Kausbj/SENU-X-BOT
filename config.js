@@ -9,7 +9,7 @@ SESSION_ID: process.env.SESSION_ID || "XMVD2LZI#Vr9gFXF92uS5I3KQhxiUV0zPJNIEDi1j
 // add your Session Id 
 AUTO_STATUS_SEEN: process.env.AUTO_STATUS_SEEN || "true",
 // make true or false status auto seen
-AUTO_STATUS_REPLY: process.env.AUTO_STATUS_REPLY || "false",
+AUTO_STATUS_REPLY: process.env.AUTO_STATUS_REPLY || "true",
 // make true if you want auto reply on status 
 AUTO_STATUS_REACT: process.env.AUTO_STATUS_REACT || "true",
 // make true if you want auto reply on status 
@@ -35,7 +35,7 @@ BOT_NAME: process.env.BOT_NAME || "KAVI-MD",
 // add bot namw here for menu
 STICKER_NAME: process.env.STICKER_NAME || "KAVI-MD",
 // type sticker pack name 
-CUSTOM_REACT: process.env.CUSTOM_REACT || "false",
+CUSTOM_REACT: process.env.CUSTOM_REACT || "true",
 // make this true for custum emoji react    
 CUSTOM_REACT_EMOJIS: process.env.CUSTOM_REACT_EMOJIS || "💝,💖,💗,❤️‍🩹,❤️,🧡,💛,💚,💙,💜,🤎,🖤,🤍",
 // chose custom react emojis by yourself 
