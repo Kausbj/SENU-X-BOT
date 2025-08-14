@@ -78,8 +78,14 @@ cmd({
                     const response = await dy_scrap.ytmp3(`https://youtube.com/watch?v=${id}`);
                     let downloadUrl = response?.result?.download?.url;
                     if (!downloadUrl) return await reply("❌ Download link not found!");
-                    type = { document: { url: downloadUrl }, fileName: `♬ ᴋᴀᴠɪ-ᴍᴅ ♬ ${title}.mp3`, mimetype: "audio/mpeg", caption: ${config.FOOTER} };
-                    
+                    type = {
+  document: {
+    url: downloadUrl,
+    fileName: `♬ ᴋᴀᴠɪ-ᴍᴅ ♬ ${title}.mp3`,
+    mimetype: "audio/mpeg"
+  },
+  caption: config.FOOTER
+};
                 } else { 
                     return await reply("❌ Invalid choice! Reply with 1.1 or 1.2.");
                 }
