@@ -88,7 +88,7 @@ const port = process.env.PORT || 9090;
 const connectDB = require('./lib/mongodb')
 connectDB();
 //========================================== 
-const {readEnv} = require('./lib/database')
+const {readEnv} = require('./lib/databas')
 const config = await readEnv('');
 const prefix = config.PREFIX 
 //==========================================	  
