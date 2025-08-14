@@ -1,8 +1,6 @@
 const config = require('../config');
 const { cmd } = require('../command');
 const DY_SCRAP = require('@dark-yasiya/scrap');
-const { sendVerified } = require('../verifiedCard');
-
 const dy_scrap = new DY_SCRAP();
 
 function replaceYouTubeID(url) {
@@ -50,9 +48,6 @@ cmd({
 
         const sentMsg = await conn.sendMessage(from, { image: { url: image }, caption: info }, { quoted: mek });
         const messageID = sentMsg.key.id;
-        // 3️⃣ Send Verified Card
-        await sendVerified(conn, from);
-
         await conn.sendMessage(from, { react: { text: '🎶', key: sentMsg.key } });
 
         // Listen for user reply only once!
