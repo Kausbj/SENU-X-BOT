@@ -27,11 +27,11 @@ async (conn, mek, m, { from, args, q, reply }) => {
         const caption = `🌴 *KAVI-MD TikTok Video* 🌴\n\n` +
                         `👤 *User:* ${author.nickname} (@${author.username})\n` +
                         `📄 *Title:* ${title}\n` +
-                        `👍 *Likes:* ${like}\n💬 *Comments:* ${comment}\n🔁 *Shares:* ${share}`;
+                        `👍 *Likes:* ${like}\n💬 *Comments:* ${comment}\n🔁 *Shares:* ${share}\n\n${config.FOOTER}`;
         
         await conn.sendMessage(from, {
             video: { url: videoUrl },
-            caption: config.FOOTER,
+            caption: caption,
             contextInfo: { mentionedJid: [m.sender] }
         }, { quoted: mek });
         
