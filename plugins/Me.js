@@ -26,7 +26,7 @@ function getCommandsByCategory(cat) {
 }
 
 cmd({
-    pattern: "menu",
+    pattern: "m",
     desc: "Show interactive menu system",
     category: "menu",
     react: "🏛️",
@@ -35,22 +35,20 @@ cmd({
     try {
         // Main Menu Caption
         let menuCaption = `👋 Hellow ${pushname}
-
-
-_*ᴛʜɪꜱ ᴋᴀᴠɪ ᴍᴅ ᴡʜᴀᴛꜱᴀᴘᴘ ʙᴏᴛ ɪꜱ ᴍᴀᴅᴇ ꜰᴏʀ ʏᴏᴜʀ ᴇᴀꜱʏ ᴛᴏ ᴜꜱᴇ. ᴛʜɪꜱ ʙᴏᴛ ɪꜱ ᴄᴜʀʀᴇɴᴛʟʏ ᴀᴄᴛɪᴠᴇ 🍇*_
-
-        
+╭━❲ 🌴𝘛𝘖𝘋𝘈𝘠 🌴 ❳━━┄►
+┃ 📅 Date Today : *${new Date().toLocaleDateString("en-GB", { timeZone: "Asia/Colombo" })}*
+┃ 🕜 Time Now : *${new Date().toLocaleTimeString("en-GB", { timeZone: "Asia/Colombo" })}*
+╰━━━━━━━━━━━┄►
 ╭━━━〔 *🏛️ 𝘒𝘈𝘝𝘐 -𝘔𝘋 🏛️* 〕━━━╼◈
-> ☬ Date Today :* ${new Date().toLocaleDateString("en-GB", { timeZone: "Asia/Colombo" })}
-> ☬ Time Now :* ${new Date().toLocaleTimeString("en-GB", { timeZone: "Asia/Colombo" })}
-> ☬ Owner : *${config.OWNER_NAME}*
-> ☬ Mode : *❲ ${config.MODE} ❳*
-> ☬ Prefix : *❲ ${config.PREFIX} ❳*
-> ☬ Version : *0.0.1 Beta*
-> ☬ Commands : *${commands.length}*
+> 🤤 Owner : *${config.OWNER_NAME}*
+> ☘️ Mode : *❲ ${config.MODE} ❳*
+> 🫟 Prefix : *❲ ${config.PREFIX} ❳*
+> ♻️ Version : *0.0.1 Beta*
+> 👾 Commands : *${commands.length}*
 ╰━━━━━━━━━━━━━━━╼◈
-
-╭━━〔 *⚓ Menu List ⚓* 〕━━┈⊷`;
+_*ᴛʜɪꜱ ᴋᴀᴠɪ ᴍᴅ ᴡʜᴀᴛꜱᴀᴘᴘ ʙᴏᴛ ɪꜱ ᴍᴀᴅᴇ ꜰᴏʀ ʏᴏᴜʀ ᴇᴀꜱʏ ᴛᴏ ᴜꜱᴇ. ᴛʜɪꜱ ʙᴏᴛ ɪꜱ ᴄᴜʀʀᴇɴᴛʟʏ ᴀᴄᴛɪᴠᴇ 🍇*_
+  
+╭━━〔 *🌴 Menu List 🌴* 〕━━┈⊷`;
 
         menuCategories.forEach((cat, index) => {
             menuCaption += `\n│ *➤ ${index + 1} ${cat.title}*`;
@@ -82,7 +80,7 @@ _*ᴛʜɪꜱ ᴋᴀᴠɪ ᴍᴅ ᴡʜᴀᴛꜱᴀᴘᴘ ʙᴏᴛ ɪꜱ ᴍᴀᴅ
         menuCategories.forEach((cat, idx) => {
             menuData[(idx + 1).toString()] = {
                 title: `${cat.icon} *${cat.title}* ${cat.icon}`,
-                content: `\n\n╭━━━〔 *🪺 ${cat.title} 🪺* 〕━━━┈⊷\n${getCommandsByCategory(cat.key)}\n╰━━━━━━━━━━━━━━━┈⊷\n> ${config.FOOTER}`,
+                content: `╭━━━〔 *🪺 ${cat.title} 🪺* 〕━━━┈⊷\n${getCommandsByCategory(cat.key)}\n╰━━━━━━━━━━━━━━━┈⊷\n\n> ${config.FOOTER}`,
                 image: true
             };
         });
