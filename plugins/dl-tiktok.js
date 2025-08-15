@@ -5,7 +5,7 @@ cmd({
     pattern: "tiktok",
     alias: ["ttdl", "tt", "tiktokdl"],
     desc: "Download TikTok video without watermark",
-    category: "downloader",
+    category: "download",
     react: "🌴",
     filename: __filename
 },
@@ -31,7 +31,7 @@ async (conn, mek, m, { from, args, q, reply }) => {
         
         await conn.sendMessage(from, {
             video: { url: videoUrl },
-            caption: config.FOOTER,
+            caption: { url: config.FOOTER || '> *👨‍💻 ᴋᴀᴠɪ ᴍᴅ ʙʏ ᴋᴀᴠɪᴅᴜ ʀᴀꜱᴀɴɢᴀ 👨‍💻*' },
             contextInfo: { mentionedJid: [m.sender] }
         }, { quoted: mek });
         
