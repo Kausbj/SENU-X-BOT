@@ -1,6 +1,6 @@
 const { cmd } = require('../command');
 const axios = require('axios');
-
+const config = require('../config');
 cmd({
     pattern: "tiktok",
     alias: ["ttdl", "tt", "tiktokdl"],
