@@ -31,7 +31,7 @@ async (conn, mek, m, { from, args, q, reply }) => {
         
         await conn.sendMessage(from, {
             video: { url: videoUrl },
-            caption: { url: config.FOOTER || '> *👨‍💻 ᴋᴀᴠɪ ᴍᴅ ʙʏ ᴋᴀᴠɪᴅᴜ ʀᴀꜱᴀɴɢᴀ 👨‍💻*' },
+            caption: config.FOOTER,
             contextInfo: { mentionedJid: [m.sender] }
         }, { quoted: mek });
         
