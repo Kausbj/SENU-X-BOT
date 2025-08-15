@@ -6,7 +6,7 @@ cmd({
     alias: ["ttdl", "tt", "tiktokdl"],
     desc: "Download TikTok video without watermark",
     category: "downloader",
-    react: "🎵",
+    react: "🌴",
     filename: __filename
 },
 async (conn, mek, m, { from, args, q, reply }) => {
@@ -24,14 +24,14 @@ async (conn, mek, m, { from, args, q, reply }) => {
         const { title, like, comment, share, author, meta } = data.data;
         const videoUrl = meta.media.find(v => v.type === "video").org;
         
-        const caption = `🎵 *TikTok Video* 🎵\n\n` +
+        const caption = `🌴 *KAVI-MD TikTok Video* 🌴\n\n` +
                         `👤 *User:* ${author.nickname} (@${author.username})\n` +
-                        `📖 *Title:* ${title}\n` +
+                        `📄 *Title:* ${title}\n` +
                         `👍 *Likes:* ${like}\n💬 *Comments:* ${comment}\n🔁 *Shares:* ${share}`;
         
         await conn.sendMessage(from, {
             video: { url: videoUrl },
-            caption: caption,
+            caption: config.FOOTER,
             contextInfo: { mentionedJid: [m.sender] }
         }, { quoted: mek });
         
